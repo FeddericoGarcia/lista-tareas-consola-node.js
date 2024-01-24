@@ -45,7 +45,7 @@ const inquirerMenu = async() =>{
 
     console.clear();
     console.log('--------------------------'.blue);
-    console.log('MENU DE TAREAS EN CONSOLA'.grey);
+    console.log('  LISTA TO-DO EN CONSOLA  '.grey);
     console.log('--------------------------\n'.blue);
 
     const { opciones } = await inquirer.prompt(questions);
@@ -79,7 +79,7 @@ const leerInput = async(message) =>{
             message,
             validate(value){
                 if (value.length === 0){
-                    return 'Por favor, ingresar un valor correcto'
+                    return 'Por favor, ingresá una tarea'
                 }
                 return true;
             }
@@ -119,15 +119,38 @@ const menuBorrador = async( tareas = []) => {
     
 }
 
-const confirm = async() => {
+const mostrarChecklist = async( tareas = []) => {
 
-    const borrar = 'ELIMINAR'.red;
+    const choices = tareas.map( (tarea, i) =>{
+        const indx = (i + 1).toString().blue;
+        return {
+                value: tarea.id,
+                name: `${ indx } - ${ tarea.desc }`,
+                checked: ( tarea.completado ) ? true : false
+            }
+    });
+
+    const question = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: "Seleccione la tarea",
+            choices
+        }
+    ];
+
+    const { ids } = await inquirer.prompt(question);
+    return ids;
+    
+}
+
+const confirm = async() => {
 
     const questions = [
         {
             type: 'confirm',
             name: 'ok',
-            message: `¿Deseas ${ borrar } la tarea?.`,
+            message: `¿Deseas ${ 'ELIMINAR'.red } la tarea?.`,
             
         }
     ];
@@ -141,6 +164,7 @@ module.exports = {
     pausa, 
     leerInput, 
     menuBorrador,
+    mostrarChecklist,
     confirm
 }
 

@@ -50,7 +50,7 @@ class Tareas{
             if (completa){
                 if(completado){
                     index += 1;
-                    console.log(`${index.toString().blue} - ${ desc } :: ${ status }`);
+                    console.log(`${index.toString().blue} - ${ desc } :: ${ completado.green }`);
                 }
             } else {
                 if(!completado){
@@ -61,8 +61,24 @@ class Tareas{
         });
     }
     
-    completarTarea(){
-        
+    completarTarea(ids = []){
+        ids.forEach( id => {
+
+            const tarea = this.listado[id];
+            if(!tarea.completado){
+                tarea.completado = new Date().toISOString();
+            }
+
+        });
+
+        this.listadoArr.forEach( tarea => {
+
+            if(!ids.includes(tarea.id)){
+                this.listado[tarea.id].completado = null;
+            }
+
+        });
+
     }
 
     borrarTarea(id){
