@@ -45,7 +45,7 @@ const inquirerMenu = async() =>{
 
     console.clear();
     console.log('--------------------------'.blue);
-    console.log('MENU DE TAREAS EN CONSOLA'.blue);
+    console.log('MENU DE TAREAS EN CONSOLA'.grey);
     console.log('--------------------------\n'.blue);
 
     const { opciones } = await inquirer.prompt(questions);
@@ -64,9 +64,9 @@ const pausa = async () =>{
         }
     ]
 
-    const resp = await inquirer.prompt(questions);
+    const respuesta = await inquirer.prompt(questions);
 
-    return resp
+    return respuesta
 
 }
 
@@ -90,8 +90,58 @@ const leerInput = async(message) =>{
     return desc;
 }
 
+const menuBorrador = async( tareas = []) => {
+
+    const choices = tareas.map( (tarea, i) =>{
+        const indx = (i + 1).toString().blue;
+        return {
+                value: tarea.id,
+                name: `${ indx } - ${ tarea.desc }`
+            }
+    });
+
+    choices.unshift({
+        value: '0',
+        name: `${'0'.blue} - Cancelar`
+    });
+
+    const questions = [
+        {
+            type: 'list',
+            name: 'id',
+            message: "Borrar tarea",
+            choices
+        }
+    ];
+
+    const { id } = await inquirer.prompt(questions);
+    return id;
+    
+}
+
+const confirm = async() => {
+
+    const borrar = 'ELIMINAR'.red;
+
+    const questions = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message: `¿Deseas ${ borrar } la tarea?.`,
+            
+        }
+    ];
+
+    const { ok } = await inquirer.prompt(questions);
+    return ok;
+}
+
 module.exports = {
-    inquirerMenu, pausa, leerInput
+    inquirerMenu, 
+    pausa, 
+    leerInput, 
+    menuBorrador,
+    confirm
 }
 
 
